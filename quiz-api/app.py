@@ -1,5 +1,7 @@
-from flask import Flask
+import hashlib
+from flask import Flask, request
 from flask_cors import CORS
+from jwt_utils import *
 
 app = Flask(__name__)
 CORS(app)
@@ -30,6 +32,15 @@ def GetQuizInfo():
             "score": 7,
         }]
     }, 200
+
+@app.route('/login', methods=['POST'])
+def PostLogin():
+    payload = request.get_json()
+    tried_password = payload['password'].encode('UTF-8')
+    hashed = hashlib.md5(tried_password).digest()
+    if hashed == b'\xd8\x17\x06PG\x92\x93\xc1.\x02\x01\xe5\xfd\xf4_@':
+        return {"token":build_token()}, 200
+    return 'Unauthorized', 401
 
 
 if __name__ == "__main__":
