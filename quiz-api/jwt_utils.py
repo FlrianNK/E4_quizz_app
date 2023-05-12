@@ -50,3 +50,15 @@ def decode_token(auth_token):
         raise JwtError('Signature expired. Please log in again.')
     except jwt.InvalidTokenError as e:
         raise JwtError('Invalid token. Please log in again.')
+    
+def verifyAuthorization(request):
+    token_bearer = request.headers.get('Authorization')
+    if token_bearer == None:
+        return 'Authorization not set.', 401
+    try:
+        decode_token(token_bearer.replace('Bearer ', ''))
+        return 'Ok', 200
+    except JwtError as err:
+        return str(err), 401
+    except Exception as e:
+        return f"Internal Server Error\n {e}", 500

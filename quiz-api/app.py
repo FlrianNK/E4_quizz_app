@@ -3,16 +3,10 @@ from flask import Flask, request
 from flask_cors import CORS
 from jwt_utils import *
 from question_utils import *
+from database_utils import *
 
 app = Flask(__name__)
 CORS(app)
-
-
-@app.route("/")
-def hello_world():
-    x = "World"
-    return f"Hello, {x}"
-
 
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
@@ -44,16 +38,45 @@ def PostLogin():
         return {"token": build_token()}, 200
     return 'Unauthorized', 401
 
+@app.route('/rebuild-db', methods=['POST'])
+def RebuildDb():
+    status = verifyAuthorization(request)[1]
+    if status == 200:
+        return initDataBase()
+    return verifyAuthorization(request)
 
 @app.route('/questions', methods=['POST'])
 def PostQuestions():
-    token_bearer = request.headers.get('Authorization')
-    try:
-        decode_token(token_bearer.replace('Bearer ', ''))
-        request.get_json()
-        return '', 200
-    except:
-        return 'Unauthorized', 401
+    status = verifyAuthorization(request)[1]
+    if status == 200:
+        data = request.get_json()
+        return sendQuestionToDB(data)
+    return verifyAuthorization(request)
+    
+@app.route('/questions', methods=['GET'])
+def GetQuestionByPosition():
+    position = request.args.get('position')
+    return f"get position {position}"
+
+@app.route('/questions/<int:questionId>', methods=['GET'])
+def GetQuestionById(questionId):
+    return f"get questionId {questionId}"
+
+@app.route('/questions/<int:questionId>', methods=['PUT'])
+def PutQuestionById(questionId):
+    return f"put questionId {questionId}"
+    
+@app.route('/questions/<int:questionId>', methods=['DELETE'])
+def DeleteQuestion(questionId):
+    return f"delete questionId {questionId}"
+
+@app.route('/questions/all', methods=['DELETE'])
+def DeleteAllQuestions():
+    return f"delete all questions"
+
+@app.route('/participations/all', methods=['DELETE'])
+def DeleteAllParticipations():
+    return f"delete all participations"
 
 
 if __name__ == "__main__":
