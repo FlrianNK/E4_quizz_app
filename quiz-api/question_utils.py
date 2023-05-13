@@ -19,6 +19,7 @@ class Question(object):
         newQuestion = Question(**(json.loads(json_data)))
         self.__dict__.update(newQuestion.__dict__)
 
+
 class Answer(object):
     def __init__(self):
         self.text = ""
@@ -57,6 +58,7 @@ def postQuestionToDB(data):
 def getQuestionFromDB(field, value):
     db_connection = sqlite3.connect('./DataBase.db')
     cur = db_connection.cursor()
+    cur.execute("begin")
     select_query = f"SELECT * FROM Question WHERE {field} = ?"
     cur.execute(select_query, (value,))
     rows = cur.fetchone()

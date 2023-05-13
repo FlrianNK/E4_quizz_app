@@ -12,23 +12,7 @@ CORS(app)
 
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
-    return {"size": 3, "scores": [
-        {
-            "date": "18/04/2022 11:57:48",
-            "playerName": "Emil",
-            "score": 10,
-        },
-        {
-            "date": "18/04/2022 11:57:48",
-            "playerName": "Dora",
-            "score": 8,
-        },
-        {
-            "date": "18/04/2022 11:57:49",
-            "playerName": "Gustav",
-            "score": 7,
-        }]
-    }, 200
+    return { "size": getQuestionsSize(), "scores": getParticipationsList() }, 200
 
 
 @app.route('/login', methods=['POST'])
@@ -96,7 +80,8 @@ def DeleteAllQuestions():
 
 @app.route('/participations', methods=['POST'])
 def PostParticipation():
-    return f"post participations"
+    data = request.get_json()
+    return postParticipationToDB(data)
 
 
 @app.route('/participations/all', methods=['DELETE'])
