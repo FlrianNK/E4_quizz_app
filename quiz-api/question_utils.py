@@ -13,7 +13,7 @@ class Question(object):
         self.possibleAnswers = possibleAnswers
 
     def toJson(self):
-        return json.dumps(self.__dict__, default=lambda o: o.__dict__, indent=4)
+        return json.dumps(self.__dict__, default=lambda o: o.__dict__, indent=4, ensure_ascii=False).encode('utf8')
 
     def fromJson(self, json_data):
         newQuestion = Question(**(json.loads(json_data)))
@@ -25,14 +25,14 @@ class Question(object):
             self.isCorrect = False
 
         def toJson(self):
-            return json.dumps(self.__dict__)
+            return json.dumps(self.__dict__, ensure_ascii=False).encode('utf8')
 
         def fromJson(self, json_data):
             newAnswer = Question(**(json.loads(json_data)))
             self.__dict__.update(newAnswer.__dict__)
 
 
-def sendQuestionToDB(data):
+def postQuestionToDB(data):
     db_connection = sqlite3.connect('./DataBase.db')
     db_connection.isolation_level = None
     cur = db_connection.cursor()
@@ -54,12 +54,24 @@ def sendQuestionToDB(data):
         return f"Internal Server Error\n {e}", 500
 
 
-def getQuestionFromDBWithPosition(position):
+def getQuestionFromDB(field, value):
     db_connection = sqlite3.connect('./DataBase.db')
     cur = db_connection.cursor()
-    select_query = "SELECT * FROM Question WHERE position = ?"
-    cur.execute(select_query, (position,))
+    select_query = f"SELECT * FROM Question WHERE {field} = ?"
+    cur.execute(select_query, (value,))
     rows = cur.fetchone()
     cur.close()
     db_connection.close()
-    return Question(*rows[1:-1], ast.literal_eval(rows[-1]))
+    return ('Request respond Not Found', 404) if rows == None else (Question(*rows[1:-1], ast.literal_eval(rows[-1])).toJson(), 200)
+
+
+def putQuestionToDB(id, newData):
+    return
+
+
+def deleteQuestionFromDB(id):
+    return
+
+
+def deleteAllQuestionsFromDB():
+    return

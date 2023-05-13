@@ -8,6 +8,7 @@ from database_utils import *
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
     return {"size": 3, "scores": [
@@ -38,6 +39,7 @@ def PostLogin():
         return {"token": build_token()}, 200
     return 'Unauthorized', 401
 
+
 @app.route('/rebuild-db', methods=['POST'])
 def RebuildDb():
     status = verifyAuthorization(request)[1]
@@ -45,34 +47,46 @@ def RebuildDb():
         return initDataBase()
     return verifyAuthorization(request)
 
+
 @app.route('/questions', methods=['POST'])
 def PostQuestions():
     status = verifyAuthorization(request)[1]
     if status == 200:
         data = request.get_json()
-        return sendQuestionToDB(data)
+        return postQuestionToDB(data)
     return verifyAuthorization(request)
-    
+
+
 @app.route('/questions', methods=['GET'])
 def GetQuestionByPosition():
     position = request.args.get('position')
-    return f"get position {position}"
+    return getQuestionFromDB('position', position)
+
 
 @app.route('/questions/<int:questionId>', methods=['GET'])
 def GetQuestionById(questionId):
-    return f"get questionId {questionId}"
+    return getQuestionFromDB('id', questionId)
+
 
 @app.route('/questions/<int:questionId>', methods=['PUT'])
 def PutQuestionById(questionId):
     return f"put questionId {questionId}"
-    
+
+
 @app.route('/questions/<int:questionId>', methods=['DELETE'])
 def DeleteQuestion(questionId):
     return f"delete questionId {questionId}"
 
+
 @app.route('/questions/all', methods=['DELETE'])
 def DeleteAllQuestions():
     return f"delete all questions"
+
+
+@app.route('/participations', methods=['POST'])
+def DeleteAllParticipations():
+    return f"post participations"
+
 
 @app.route('/participations/all', methods=['DELETE'])
 def DeleteAllParticipations():
