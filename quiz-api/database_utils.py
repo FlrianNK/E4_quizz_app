@@ -8,7 +8,7 @@ def initDataBase():
         cur.execute('DROP TABLE IF EXISTS Participation')
         cur.execute(
             'CREATE TABLE Question (id INTEGER NOT NULL UNIQUE PRIMARY KEY, text TEXT, title TEXT, image TEXT, position INTEGER, possibleAnswers TEXT)')
-        cur.execute('CREATE TABLE Participation (id INTEGER NOT NULL UNIQUE PRIMARY KEY, date TEXT, playerName TEXT, score INTEGER)')
+        cur.execute('CREATE TABLE Participation (id INTEGER NOT NULL UNIQUE PRIMARY KEY, date TEXT, playerName TEXT, answers TEXT, score INTEGER)')
         db_connection.commit()
         cur.close()
         db_connection.close()

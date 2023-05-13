@@ -4,6 +4,7 @@ from flask_cors import CORS
 from jwt_utils import *
 from question_utils import *
 from database_utils import *
+from participation_utils import *
 
 app = Flask(__name__)
 CORS(app)
@@ -70,27 +71,40 @@ def GetQuestionById(questionId):
 
 @app.route('/questions/<int:questionId>', methods=['PUT'])
 def PutQuestionById(questionId):
-    return f"put questionId {questionId}"
+    status = verifyAuthorization(request)[1]
+    if status == 200:
+        data = request.get_json()
+        return updateQuestionInDB(questionId, data)
+    return verifyAuthorization(request)
 
 
 @app.route('/questions/<int:questionId>', methods=['DELETE'])
 def DeleteQuestion(questionId):
-    return f"delete questionId {questionId}"
+    status = verifyAuthorization(request)[1]
+    if status == 200:
+        return deleteQuestionFromDB(questionId)
+    return verifyAuthorization(request)
 
 
 @app.route('/questions/all', methods=['DELETE'])
 def DeleteAllQuestions():
-    return f"delete all questions"
+    status = verifyAuthorization(request)[1]
+    if status == 200:
+        return deleteAllQuestionsFromDB()
+    return verifyAuthorization(request)
 
 
 @app.route('/participations', methods=['POST'])
-def DeleteAllParticipations():
+def PostParticipation():
     return f"post participations"
 
 
 @app.route('/participations/all', methods=['DELETE'])
 def DeleteAllParticipations():
-    return f"delete all participations"
+    status = verifyAuthorization(request)[1]
+    if status == 200:
+        return deleteAllParticipationsFromDB()
+    return verifyAuthorization(request)
 
 
 if __name__ == "__main__":

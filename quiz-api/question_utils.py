@@ -19,17 +19,17 @@ class Question(object):
         newQuestion = Question(**(json.loads(json_data)))
         self.__dict__.update(newQuestion.__dict__)
 
-    class Answer(object):
-        def __init__(self):
-            self.text = ""
-            self.isCorrect = False
+class Answer(object):
+    def __init__(self):
+        self.text = ""
+        self.isCorrect = False
 
-        def toJson(self):
-            return json.dumps(self.__dict__, ensure_ascii=False).encode('utf8')
+    def toJson(self):
+        return json.dumps(self.__dict__, ensure_ascii=False).encode('utf8')
 
-        def fromJson(self, json_data):
-            newAnswer = Question(**(json.loads(json_data)))
-            self.__dict__.update(newAnswer.__dict__)
+    def fromJson(self, json_data):
+        newAnswer = Answer(**(json.loads(json_data)))
+        self.__dict__.update(newAnswer.__dict__)
 
 
 def postQuestionToDB(data):
@@ -65,13 +65,64 @@ def getQuestionFromDB(field, value):
     return ('Request respond Not Found', 404) if rows == None else (Question(*rows[1:-1], ast.literal_eval(rows[-1])).toJson(), 200)
 
 
-def putQuestionToDB(id, newData):
-    return
+def updateQuestionInDB(id, newData):
+    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()
+    cur.execute("begin")
+    update_query = "UPDATE Question SET text = ?, title = ?, image = ?, position = ?, possibleAnswers = ? WHERE id = ?"
+    update_question = Question(**newData)
+    cur.execute(update_query, (update_question.text, update_question.title,
+                update_question.image, update_question.position, str(update_question.possibleAnswers), id))
+    if cur.rowcount == 0:
+        return 'Request respond Not Found', 404
+    try:
+        cur.execute('commit')
+        cur.close()
+        db_connection.close()
+        return '', 204
+    except Exception as e:
+        cur.execute('rollback')
+        cur.close()
+        db_connection.close()
+        return f"Internal Server Error\n {e}", 500
 
 
 def deleteQuestionFromDB(id):
-    return
+    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()
+    cur.execute("begin")
+    delete_query = "DELETE FROM Question WHERE id = ?"
+    cur.execute(delete_query, (id,))
+    if cur.rowcount == 0:
+        return 'Request respond Not Found', 404
+    try:
+        cur.execute('commit')
+        cur.close()
+        db_connection.close()
+        return '', 204
+    except Exception as e:
+        cur.execute('rollback')
+        cur.close()
+        db_connection.close()
+        return f"Internal Server Error\n {e}", 500
 
 
 def deleteAllQuestionsFromDB():
-    return
+    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()
+    cur.execute("begin")
+    delete_query = "DELETE FROM Question"
+    cur.execute(delete_query)
+    try:
+        cur.execute('commit')
+        cur.close()
+        db_connection.close()
+        return '', 204
+    except Exception as e:
+        cur.execute('rollback')
+        cur.close()
+        db_connection.close()
+        return f"Internal Server Error\n {e}", 500
