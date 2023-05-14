@@ -6,10 +6,6 @@
     <p>Score: {{ result }} / {{ totalNumberOfQuestions }}</p>
     <h2>Ranking</h2>
     <p>{{ rank }} / {{ registeredScores.length }}</p>
-    <h2>Your participations</h2>
-    <div v-for="scoreEntry in participations" v-bind:key="scoreEntry.date">
-      {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
-    </div>
     <h2>All participations</h2>
     <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date">
       {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
@@ -28,7 +24,6 @@ export default {
       playerName: "",
       result: 0,
       rank: 0,
-      participations: [],
       totalNumberOfQuestions: 0,
     };
   },
@@ -42,12 +37,7 @@ export default {
       this.playerName,
       this.result
     );
-    this.participations = this.getParticipations(
-      this.registeredScores,
-      this.playerName
-    );
     this.totalNumberOfQuestions = quizInfoApiResult.data.size;
-    this.totalNumberOfParticipations = this.registeredScores.length;
   },
   methods: {
     getRank(registeredScores, name, score) {
@@ -64,9 +54,6 @@ export default {
         return true;
       });
       return index + 1;
-    },
-    getParticipations(registeredScores, name) {
-      return registeredScores.filter((obj) => obj["playerName"] === name);
     },
   },
 };
