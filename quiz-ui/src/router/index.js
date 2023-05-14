@@ -12,15 +12,17 @@ const router = createRouter({
     {
       path: "/start-new-quiz-page",
       name: "start-new-quiz-page",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/NewQuizPage.vue"),
     },
     {
       path: "/questions",
       name: "questions",
-      component: () => import("../views/QuestionsPage.vue"),
+      component: () => import("../views/QuestionManager.vue"),
+    },
+    {
+      path: "/scores",
+      name: "scores",
+      component: () => import("../views/ScoreDisplay.vue"),
     },
   ],
 });

@@ -31,6 +31,9 @@ export default {
     return this.call("get", "quiz-info");
   },
   getQuestion(position) {
-    // not implemented
+    return this.call("get", "questions?position=" + position);
+  },
+  postParticipation(participation) {
+    return this.call("post", "participations", participation);
   },
 };
