@@ -5,9 +5,8 @@ from question_utils import *
 
 
 class Participation(object):
-    current_time = datetime.now()
 
-    def __init__(self, date=current_time.strftime("%d/%m/%Y %H:%M:%S"), playerName="", score=0):
+    def __init__(self, date=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), playerName="", score=0):
         self.date = date
         self.playerName = playerName
         self.score = score

@@ -8,6 +8,7 @@
 
 <script>
 import quizApiService from "@/services/QuizApiService";
+import participationStorageService from "@/services/ParticipationStorageService";
 
 export default {
   name: "HomePage",
@@ -17,11 +18,9 @@ export default {
     };
   },
   async created() {
+    participationStorageService.clear();
     var quizInfoApiResult = await quizApiService.getQuizInfo();
-    console.log(quizInfoApiResult);
     this.registeredScores = quizInfoApiResult.data.scores;
-    console.log("Composant Home page 'created'");
-    console.log(this.registeredScores);
   },
 };
 </script>

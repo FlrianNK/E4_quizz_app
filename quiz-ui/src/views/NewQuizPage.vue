@@ -2,7 +2,6 @@
   <div class="NewQuizPage">
     <p>Saisissez votre nom :</p>
     <input type="text" v-model="username" />
-    <p>{{ username }}</p>
     <button type="button" @click="launchNewQuiz">GO !</button>
   </div>
 </template>
