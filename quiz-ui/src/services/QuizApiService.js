@@ -36,4 +36,7 @@ export default {
   postParticipation(participation) {
     return this.call("post", "participations", participation);
   },
+  postLogin(password) {
+    return this.call("post", "login", { password: password });
+  },
 };
