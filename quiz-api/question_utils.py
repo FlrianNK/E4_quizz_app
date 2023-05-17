@@ -5,7 +5,7 @@ import ast
 
 class Question(object):
 
-    def __init__(self, id="",text="", title="", image="", position=0, possibleAnswers=[]):
+    def __init__(self, id="", text="", title="", image="", position=0, possibleAnswers=[]):
         self.id = id
         self.text = text
         self.title = title
@@ -76,6 +76,27 @@ def getQuestionFromDB(field, value):
     cur.close()
     db_connection.close()
     return ('Request respond Not Found', 404) if rows == None else (Question(*rows[:-1], ast.literal_eval(rows[-1])).toJson(), 200)
+
+
+def getAllQuestionFromDb():
+    questionList = []
+    db_connection = sqlite3.connect('./DataBase.db')
+    cur = db_connection.cursor()
+    cur.execute("begin")
+    query = f"SELECT * FROM Question"
+    cur.execute(query)
+    try:
+        rows = cur.fetchall()
+        for row in rows:
+            question = Question(*row)
+            questionList.append(json.loads(question.toJson()))
+        cur.close()
+        db_connection.close()
+        return questionList, 200
+    except Exception as e:
+        cur.close()
+        db_connection.close()
+        return f"Internal Server Error\n {e}", 500
 
 
 def updateQuestionInDB(id, newData):

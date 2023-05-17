@@ -2,6 +2,12 @@ export default {
   clear() {
     window.localStorage.removeItem("playerName");
     window.localStorage.removeItem("participationScore");
+    window.localStorage.removeItem("adminQuestionSelected");
+  },
+  clearAdminMode() {
+    this.clear();
+    window.localStorage.removeItem("tokenTime");
+    window.localStorage.removeItem("token");
   },
   savePlayerName(playerName) {
     window.localStorage.setItem("playerName", playerName);
@@ -27,10 +33,16 @@ export default {
     if (storedTime) {
       var currentTime = new Date().getTime();
       if (currentTime - parseInt(storedTime) > 3600000) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("tokenTime");
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("tokenTime");
       }
     }
     return window.localStorage.getItem("token");
+  },
+  saveAdminQuestion(position) {
+    window.localStorage.setItem("adminQuestionSelected", String(position));
+  },
+  getAdminQuestion() {
+    return parseInt(window.localStorage.getItem("adminQuestionSelected"));
   },
 };

@@ -33,6 +33,9 @@ export default {
   getQuestion(position) {
     return this.call("get", "questions?position=" + position);
   },
+  getAllQuestion() {
+    return this.call("get", "questions/all");
+  },
   postParticipation(participation) {
     return this.call("post", "participations", participation);
   },

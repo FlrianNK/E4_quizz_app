@@ -3,43 +3,41 @@
     <h1>QuestionList</h1>
     <ol>
       <li v-for="question in questionList" v-bind:key="question.position">
-        <a @click="handleQuestion(question)">{{ question.title }}</a>
+        <a @click="handleQuestion(question.position)">{{ question.title }}</a>
       </li>
     </ol>
-    <button type="button">Créer une question</button>
+    <button type="button" @click="editQuestion">Créer une question</button>
+    <QuestionEdition v-if="edit" />
   </div>
 </template>
 
 <script>
+import QuestionEdition from "./QuestionEdition.vue";
 import quizApiService from "@/services/QuizApiService";
+import participationStorageService from "../services/ParticipationStorageService";
+
 export default {
+  components: {
+    QuestionEdition,
+  },
   data() {
     return {
       questionList: [],
+      edit: false,
     };
   },
   async created() {
-    let apiResponse = await quizApiService.getQuizInfo();
-    this.setQuestionList(apiResponse.data.size);
+    participationStorageService.clear();
+    let apiResponse = await quizApiService.getAllQuestion();
+    this.questionList = apiResponse.data;
   },
-  props: {
-    question: {
-      type: Object,
-      required: true,
-    },
-  },
-  emits: ["question-selected", "good-answer"],
   methods: {
-    async setQuestionList(questionsTotalNumber) {
-      let currentQuestion;
-      for (let i = 1; i <= questionsTotalNumber; i++) {
-        let currentQuestionResponse = await quizApiService.getQuestion(i);
-        currentQuestion = currentQuestionResponse.data;
-        this.questionList.push(currentQuestion);
-      }
+    handleQuestion(position) {
+      this.$router.push("/admin/edit");
+      participationStorageService.saveAdminQuestion(position);
     },
-    handleQuestion(question) {
-      this.$emit("question-selected", question);
+    editQuestion() {
+      this.edit = !this.edit;
     },
   },
 };

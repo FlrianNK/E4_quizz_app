@@ -7,31 +7,20 @@
       <p v-if="showErrorMessage" class="error-message">Mauvais mot de passe</p>
     </div>
     <div v-if="adminMode">
-      <QuestionsList
-        :question="questionSelected"
-        @question-selected="answerClickedHandler"
-      />
-      <QuestionAdminDisplay
-        :question="questionSelected"
-        v-if="questionSelected"
-      />
-      <!-- <QuestionEdition :question="questionSelected" /> -->
+      <button type="button" @click="disconnect">Déconnexion</button>
+      <QuestionsList />
     </div>
   </div>
 </template>
 
 <script>
 import QuestionsList from "./QuestionsList.vue";
-import QuestionAdminDisplay from "./QuestionAdminDisplay.vue";
-// import QuestionEdition from "./QuestionEdition.vue";
 import participationStorageService from "@/services/ParticipationStorageService";
 import quizApiService from "@/services/QuizApiService";
 
 export default {
   components: {
     QuestionsList,
-    QuestionAdminDisplay,
-    // QuestionEdition,
   },
   data() {
     return {
@@ -56,8 +45,9 @@ export default {
         this.showErrorMessage = true;
       }
     },
-    async answerClickedHandler(question) {
-      this.questionSelected = question;
+    disconnect() {
+      participationStorageService.clearAdminMode();
+      location.reload();
     },
   },
 };

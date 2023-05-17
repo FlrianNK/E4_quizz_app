@@ -1,6 +1,8 @@
 <template>
-  <div class="QuestionAdminDisplay">
+  <div v-if="question != null" class="QuestionAdminDisplay">
     <h1>QuestionAdminDisplay</h1>
+    <button type="button" @click="back">Retour</button>
+    <button type="button" @click="disconnect">Déconnexion</button>
     <h2>Titre:</h2>
     <p>{{ question.title }}</p>
     <h2>Intitulé:</h2>
@@ -11,26 +13,43 @@
         <span :class="{ marker: answer.isCorrect }">{{ answer.text }}</span>
       </li>
     </ul>
-    <button type="button">Éditer</button>
+    <button type="button" @click="editQuestion">Éditer</button>
     <button type="button">Supprimer</button>
+    <QuestionEdition v-if="edit" />
   </div>
 </template>
 
 <script>
+import QuestionEdition from "./QuestionEdition.vue";
+import quizApiService from "@/services/QuizApiService";
+import participationStorageService from "../services/ParticipationStorageService";
+
 export default {
+  components: {
+    QuestionEdition,
+  },
   data() {
     return {
-      selectedOptionIndex: null,
+      question: null,
+      edit: false,
     };
   },
-  props: {
-    question: {
-      type: Object,
-      required: true,
-    },
+  async created() {
+    let position = participationStorageService.getAdminQuestion();
+    let response = await quizApiService.getQuestion(position);
+    this.question = response.data;
   },
   methods: {
-    setGoodAnswerIndex() {},
+    disconnect() {
+      participationStorageService.clearAdminMode();
+      location.reload();
+    },
+    back() {
+      this.$router.push("/admin");
+    },
+    editQuestion() {
+      this.edit = !this.edit;
+    },
   },
 };
 </script>

@@ -47,6 +47,9 @@ def GetQuestionByPosition():
     position = request.args.get('position')
     return getQuestionFromDB('position', position)
 
+@app.route('/questions/all', methods=['GET'])
+def GetAllQuestions():
+    return getAllQuestionFromDb()
 
 @app.route('/questions/<int:questionId>', methods=['GET'])
 def GetQuestionById(questionId):

@@ -29,6 +29,11 @@ const router = createRouter({
       name: "admin",
       component: () => import("../views/AdminPage.vue"),
     },
+    {
+      path: "/admin/edit",
+      name: "admin/edit",
+      component: () => import("../views/QuestionAdminDisplay.vue"),
+    },
   ],
 });
 
