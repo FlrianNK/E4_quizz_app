@@ -5,7 +5,8 @@ import ast
 
 class Question(object):
 
-    def __init__(self, text="", title="", image="", position=0, possibleAnswers=[]):
+    def __init__(self, id="",text="", title="", image="", position=0, possibleAnswers=[]):
+        self.id = id
         self.text = text
         self.title = title
         self.image = image
@@ -38,8 +39,18 @@ def postQuestionToDB(data):
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
-    insert_query = "INSERT INTO Question (text, title, image, position, possibleAnswers) VALUES (?, ?, ?, ?, ?)"
+    query = f"SELECT COUNT(*) FROM Question"
+    cur.execute(query)
+    result = cur.fetchone()
+    totalQuestionsNumber = result[0]
     input_question = Question(**data)
+    if input_question.position < totalQuestionsNumber:
+        condition = "position >= " + str(input_question.position)
+        update_query = f"UPDATE Question SET position = position + ? WHERE {condition}"
+        cur.execute(update_query, (1,))
+    else:
+        input_question.position = totalQuestionsNumber+1
+    insert_query = "INSERT INTO Question (text, title, image, position, possibleAnswers) VALUES (?, ?, ?, ?, ?)"
     cur.execute(insert_query, (input_question.text, input_question.title,
                 input_question.image, input_question.position, str(input_question.possibleAnswers)))
     try:
@@ -64,7 +75,7 @@ def getQuestionFromDB(field, value):
     rows = cur.fetchone()
     cur.close()
     db_connection.close()
-    return ('Request respond Not Found', 404) if rows == None else (Question(*rows[1:-1], ast.literal_eval(rows[-1])).toJson(), 200)
+    return ('Request respond Not Found', 404) if rows == None else (Question(*rows[:-1], ast.literal_eval(rows[-1])).toJson(), 200)
 
 
 def updateQuestionInDB(id, newData):
@@ -72,11 +83,37 @@ def updateQuestionInDB(id, newData):
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
+    select_query = f"SELECT * FROM Question WHERE id == {id}"
+    cur.execute(select_query)
+    if cur.fetchone() == None:
+        cur.close()
+        db_connection.close()
+        return 'Request respond Not Found', 404
+    update_question = Question(id, **newData)
+    select_query = f"SELECT * FROM Question WHERE position == {update_question.position}"
+    cur.execute(select_query)
+    old_data = cur.fetchone()
+    if old_data:
+        questionWithSamePos = Question(*old_data)
+        if update_question.position == questionWithSamePos.position and id != questionWithSamePos.id:
+            select_query = f"SELECT * FROM Question WHERE id == {id}"
+            cur.execute(select_query)
+            old_question = Question(*cur.fetchone())
+            old_position = old_question.position
+            new_position = update_question.position
+            if new_position < old_position:
+                condition = f"(position >= {new_position} AND position < {old_position})"
+                update_query = f"UPDATE Question SET position = position + ? WHERE {condition}"
+            else:
+                condition = f"(position <= {new_position} AND position > {old_position})"
+                update_query = f"UPDATE Question SET position = position - ? WHERE {condition}"
+            cur.execute(update_query, (1,))
     update_query = "UPDATE Question SET text = ?, title = ?, image = ?, position = ?, possibleAnswers = ? WHERE id = ?"
-    update_question = Question(**newData)
     cur.execute(update_query, (update_question.text, update_question.title,
                 update_question.image, update_question.position, str(update_question.possibleAnswers), id))
-    if cur.rowcount == 0:
+    if cur.rowcount < 1:
+        cur.close()
+        db_connection.close()
         return 'Request respond Not Found', 404
     try:
         cur.execute('commit')
@@ -95,9 +132,19 @@ def deleteQuestionFromDB(id):
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
+    select_query = f"SELECT * FROM Question WHERE id == {id}"
+    cur.execute(select_query)
+    old_data = cur.fetchone()
+    if old_data:
+        old_question = Question(*old_data)
+        condition = "position >= " + str(old_question.position)
+        update_query = f"UPDATE Question SET position = position - ? WHERE {condition}"
+        cur.execute(update_query, (1,))
     delete_query = "DELETE FROM Question WHERE id = ?"
     cur.execute(delete_query, (id,))
-    if cur.rowcount == 0:
+    if cur.rowcount < 1:
+        cur.close()
+        db_connection.close()
         return 'Request respond Not Found', 404
     try:
         cur.execute('commit')

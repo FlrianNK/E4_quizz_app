@@ -60,7 +60,7 @@ def getGoodAnswersDict():
     rows = cur.fetchall()
     questions = []
     for row in rows:
-        questions += [Question(*row[1:-1], ast.literal_eval(row[-1]))]
+        questions += [Question(*row[0:-1], ast.literal_eval(row[-1]))]
     for question in questions:
         answerPosition = 1
         for answer in question.possibleAnswers:
