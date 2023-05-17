@@ -1,12 +1,42 @@
 <template>
   <div class="QuestionAdminDisplay">
     <h1>QuestionAdminDisplay</h1>
-    - un champ d’édition “Position” permettant de modifier la position de la
-    question dans le quiz - un champ d’édition “Titre” - un champ d’édition
-    “Intitulé” - un bouton d’upload d’image + aperçu de l’image chargée - une
-    liste de quatre éditions de réponses possibles, avec chacune : - un champ
-    d’édition “Intitulé de la réponse” - une “checkbox” spécifiant la réponse
-    correcte parmi les quatre - un bouton de sauvegarde (retour à la liste avec
-    sauvegarde) - un bouton d’annulation (retour à la liste sans sauvegarde)
+    <h2>Titre:</h2>
+    <p>{{ question.title }}</p>
+    <h2>Intitulé:</h2>
+    <p>{{ question.text }}</p>
+    <h2>Liste des réponses:</h2>
+    <ul>
+      <li v-for="(answer, index) in question.possibleAnswers" :key="index">
+        <span :class="{ marker: answer.isCorrect }">{{ answer.text }}</span>
+      </li>
+    </ul>
+    <button type="button">Éditer</button>
+    <button type="button">Supprimer</button>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      selectedOptionIndex: null,
+    };
+  },
+  props: {
+    question: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods: {
+    setGoodAnswerIndex() {},
+  },
+};
+</script>
+
+<style>
+.marker {
+  background-color: rgba(61, 146, 61, 0.538);
+}
+</style>
