@@ -1,5 +1,6 @@
 import jwt
 import datetime
+import sqlite3
 from werkzeug.exceptions import Unauthorized
 
 
@@ -60,5 +61,23 @@ def verifyAuthorization(request):
         return 'Ok', 200
     except JwtError as err:
         return str(err), 401
+    except Exception as e:
+        return f"Internal Server Error\n {e}", 500
+
+def initDataBase():
+    try:
+        db_connection = sqlite3.connect('./DataBase.db')
+        cur = db_connection.cursor()
+        cur.execute("begin")
+        cur.execute('DROP TABLE IF EXISTS Question')
+        cur.execute('DROP TABLE IF EXISTS Participation')
+        cur.execute(
+            'CREATE TABLE Question (id INTEGER NOT NULL UNIQUE PRIMARY KEY, text TEXT, title TEXT, image TEXT, position INTEGER, possibleAnswers TEXT)')
+        cur.execute(
+            'CREATE TABLE Participation (id INTEGER NOT NULL UNIQUE PRIMARY KEY, date TEXT, playerName TEXT, score INTEGER)')
+        db_connection.commit()
+        cur.close()
+        db_connection.close()
+        return 'Ok', 200
     except Exception as e:
         return f"Internal Server Error\n {e}", 500

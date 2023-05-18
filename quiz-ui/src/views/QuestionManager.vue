@@ -1,5 +1,5 @@
 <template>
-  <div class="QuestionManager">
+  <div v-if="currentQuestion != null" class="QuestionManager">
     <h1>
       Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestions }}
     </h1>
@@ -30,7 +30,11 @@ export default {
   async created() {
     var quizInfoApiResult = await quizApiService.getQuizInfo();
     this.totalNumberOfQuestions = quizInfoApiResult.data.size;
-    this.loadQuestionByPosition(this.currentQuestionPosition);
+    if (this.totalNumberOfQuestions == 0) {
+      this.$router.push("/");
+    } else {
+      this.loadQuestionByPosition(this.currentQuestionPosition);
+    }
   },
   methods: {
     async loadQuestionByPosition(position) {
@@ -47,6 +51,7 @@ export default {
       }
     },
     async endQuiz() {
+      console.log(this.answersList);
       let postParticipation = await quizApiService.postParticipation({
         playerName: participationStorageService.getPlayerName(),
         answers: this.answersList,

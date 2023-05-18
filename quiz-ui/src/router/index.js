@@ -22,7 +22,17 @@ const router = createRouter({
     {
       path: "/scores",
       name: "scores",
-      component: () => import("../views/ScoreDisplay.vue"),
+      component: () => import("../views/ScorePage.vue"),
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () => import("../views/AdminPage.vue"),
+    },
+    {
+      path: "/admin/edit",
+      name: "admin/edit",
+      component: () => import("../views/QuestionAdminDisplay.vue"),
     },
   ],
 });

@@ -3,7 +3,6 @@ import sqlite3
 from datetime import datetime
 from question_utils import *
 
-
 class Participation(object):
 
     def __init__(self, date=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), playerName="", score=0):
@@ -18,16 +17,34 @@ class Participation(object):
         newQuestion = Participation(**(json.loads(json_data)))
         self.__dict__.update(newQuestion.__dict__)
 
+def getParticipationsList():
+    participationsList = []
+    db_connection = sqlite3.connect('./DataBase.db')
+    cur = db_connection.cursor()
+    cur.execute("begin")
+    query = f"SELECT * FROM Participation"
+    cur.execute(query)
+    try:
+        rows = cur.fetchall()
+        for row in rows:
+            participation = Participation(*row[1:])
+            participationsList += [json.loads(participation.toJson())]
+        participationsList.sort(key=lambda participation: participation['score'], reverse=True)
+    finally:
+        cur.close()
+        db_connection.close()
+        return participationsList
 
 def postParticipationToDB(data):
     input_participation = Participation()
     input_participation.playerName = data['playerName']
     answers = data['answers']
-    if len(answers) != 10:
+    questionSize = getQuestionsSize()
+    if len(answers) != questionSize:
         return 'Bad request', 400
     goodAnswers = getGoodAnswersDict()
     score = 0
-    for i in range(10):
+    for i in range(questionSize):
         if answers[i] == goodAnswers[i+1]:
             score += 1
     input_participation.score = score
@@ -60,7 +77,7 @@ def getGoodAnswersDict():
     rows = cur.fetchall()
     questions = []
     for row in rows:
-        questions += [Question(*row[1:-1], ast.literal_eval(row[-1]))]
+        questions += [Question(*row[0:-1], ast.literal_eval(row[-1]))]
     for question in questions:
         answerPosition = 1
         for answer in question.possibleAnswers:

@@ -7,7 +7,7 @@ import { RouterLink, RouterView } from "vue-router";
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <!-- <RouterLink to="/about">About</RouterLink> -->
+        <RouterLink to="/admin">Administration</RouterLink>
       </nav>
     </div>
   </header>
@@ -15,7 +15,7 @@ import { RouterLink, RouterView } from "vue-router";
   <RouterView />
 </template>
 
-<!-- <style scoped>
+<style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -68,4 +68,4 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
-</style> -->
+</style>
