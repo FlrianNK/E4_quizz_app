@@ -31,19 +31,19 @@ export default {
         position: 1,
         possibleAnswers: [
           {
-            text: "",
+            text: "reponse 1",
             isCorrect: true,
           },
           {
-            text: "",
+            text: "reponse 2",
             isCorrect: false,
           },
           {
-            text: "",
+            text: "reponse 3",
             isCorrect: false,
           },
           {
-            text: "",
+            text: "reponse 4",
             isCorrect: false,
           },
         ],

@@ -2,7 +2,6 @@ import json
 import sqlite3
 import ast
 
-
 class Question(object):
 
     def __init__(self, id="", text="", title="", image="", position=0, possibleAnswers=[]):
@@ -33,6 +32,21 @@ class Answer(object):
         newAnswer = Answer(**(json.loads(json_data)))
         self.__dict__.update(newAnswer.__dict__)
 
+def getQuestionsSize():
+    row_count = 0
+    db_connection = sqlite3.connect('./DataBase.db')
+    cur = db_connection.cursor()
+    cur.execute("begin")
+    query = f"SELECT COUNT(*) FROM Question"
+    cur.execute(query)
+    try:
+        result = cur.fetchone()
+        row_count = result[0]
+    finally:
+        cur.close()
+        db_connection.close()
+        return row_count
+
 
 def postQuestionToDB(data):
     db_connection = sqlite3.connect('./DataBase.db')
@@ -44,6 +58,8 @@ def postQuestionToDB(data):
     result = cur.fetchone()
     totalQuestionsNumber = result[0]
     input_question = Question(**data)
+    if input_question.position == 0:
+        input_question.position = 1
     if input_question.position < totalQuestionsNumber:
         condition = "position >= " + str(input_question.position)
         update_query = f"UPDATE Question SET position = position + ? WHERE {condition}"
@@ -90,6 +106,7 @@ def getAllQuestionFromDb():
         for row in rows:
             question = Question(*row)
             questionList.append(json.loads(question.toJson()))
+        questionList.sort(key=lambda question: question['position'])
         cur.close()
         db_connection.close()
         return questionList, 200
@@ -111,6 +128,14 @@ def updateQuestionInDB(id, newData):
         db_connection.close()
         return 'Request respond Not Found', 404
     update_question = Question(id, **newData)
+    query = f"SELECT COUNT(*) FROM Question"
+    cur.execute(query)
+    result = cur.fetchone()
+    totalNumberOfQuestions = result[0]
+    if update_question.position > totalNumberOfQuestions:
+        update_question.position = totalNumberOfQuestions
+    if update_question.position == 0:
+        update_question.position = 1
     select_query = f"SELECT * FROM Question WHERE position == {update_question.position}"
     cur.execute(select_query)
     old_data = cur.fetchone()

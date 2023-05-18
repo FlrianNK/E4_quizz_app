@@ -4,7 +4,7 @@
     <div v-if="!adminMode">
       <input type="password" v-model="password" />
       <button type="button" @click="login">Connexion</button>
-      <p v-if="showErrorMessage" class="error-message">Mauvais mot de passe</p>
+      <p v-if="showErrorMessage">Mauvais mot de passe</p>
     </div>
     <div v-if="adminMode">
       <button type="button" @click="disconnect">Déconnexion</button>

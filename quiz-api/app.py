@@ -3,7 +3,6 @@ from flask import Flask, request
 from flask_cors import CORS
 from jwt_utils import *
 from question_utils import *
-from database_utils import *
 from participation_utils import *
 
 app = Flask(__name__)

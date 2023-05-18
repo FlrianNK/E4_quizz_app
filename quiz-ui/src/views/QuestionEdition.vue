@@ -34,7 +34,9 @@
 </template>
 
 <script>
-import ImageUpload from "./ImageUpload.vue";
+import participationStorageService from "../services/ParticipationStorageService";
+import quizApiService from "../services/QuizApiService";
+import imageUpload from "./ImageUpload.vue";
 export default {
   props: {
     question: {
@@ -47,7 +49,7 @@ export default {
     },
   },
   components: {
-    ImageUpload,
+    ImageUpload: imageUpload,
   },
   data() {
     return {
@@ -75,11 +77,39 @@ export default {
         this.image = this.question.image;
       }
     },
-    save() {
+    async save() {
+      let newQuestion = {
+        text: this.text,
+        title: this.title,
+        image: this.image,
+        position: parseInt(this.position),
+        possibleAnswers: [
+          {
+            text: this.possibleAnswersText[0],
+            isCorrect: false,
+          },
+          {
+            text: this.possibleAnswersText[1],
+            isCorrect: false,
+          },
+          {
+            text: this.possibleAnswersText[2],
+            isCorrect: false,
+          },
+          {
+            text: this.possibleAnswersText[3],
+            isCorrect: false,
+          },
+        ],
+      };
+      newQuestion.possibleAnswers[this.rightAnswer].isCorrect = true;
+      let token = participationStorageService.getToken();
       if (this.edit) {
-        console.log("edit");
+        await quizApiService.editQuestion(this.question.id, newQuestion, token);
+        this.$router.push("/admin");
       } else {
-        console.log("add");
+        await quizApiService.addQuestion(newQuestion, token);
+        location.reload();
       }
     },
     cancel() {
