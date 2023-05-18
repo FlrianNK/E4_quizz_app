@@ -7,7 +7,7 @@
       </li>
     </ol>
     <button type="button" @click="editQuestion">Créer une question</button>
-    <QuestionEdition v-if="edit" />
+    <QuestionEdition v-if="edit" :question="dummyQuestion" :edit="false" />
   </div>
 </template>
 
@@ -24,6 +24,30 @@ export default {
     return {
       questionList: [],
       edit: false,
+      dummyQuestion: {
+        text: "text",
+        title: "title",
+        image: "falseb64imagecontent",
+        position: 1,
+        possibleAnswers: [
+          {
+            text: "",
+            isCorrect: true,
+          },
+          {
+            text: "",
+            isCorrect: false,
+          },
+          {
+            text: "",
+            isCorrect: false,
+          },
+          {
+            text: "",
+            isCorrect: false,
+          },
+        ],
+      },
     };
   },
   async created() {

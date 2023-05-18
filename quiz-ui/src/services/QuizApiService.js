@@ -42,4 +42,7 @@ export default {
   postLogin(password) {
     return this.call("post", "login", { password: password });
   },
+  deleteQuestion(id, token) {
+    return this.call("delete", "questions/" + id, null, token);
+  },
 };
