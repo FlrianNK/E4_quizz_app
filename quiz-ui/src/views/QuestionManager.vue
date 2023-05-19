@@ -1,8 +1,8 @@
 <template>
   <div v-if="currentQuestion != null" class="QuestionManager">
-    <h1>
+    <h2>
       Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestions }}
-    </h1>
+    </h2>
     <QuestionDisplay
       :question="currentQuestion"
       @answer-selected="answerClickedHandler"
@@ -64,3 +64,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.QuestionManager {
+  margin-top: 40px;
+  margin-right: 15vw;
+  margin-left: 15vw;
+}
+h2 {
+  width: fit-content;
+  color: white;
+  background-color: #732183df;
+  border-radius: 50px;
+  border: 2px solid #e3d2e2;
+  padding: 10px 20px;
+}
+</style>
