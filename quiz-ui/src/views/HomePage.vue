@@ -90,6 +90,7 @@ a.new-quiz {
   padding: 10px 20px;
   font-size: 18px;
   margin-top: 35px;
+  transition: background-color 0.3s ease;
 }
 
 a.new-quiz:hover {

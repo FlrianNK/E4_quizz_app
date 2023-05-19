@@ -6,26 +6,26 @@
     <h2>Titre</h2>
     <input type="text" v-model="title" />
     <h2>Intitulé</h2>
-    <input v-model="text" />
+    <textarea v-model="text"></textarea>
     <h2>Image</h2>
     <ImageUpload @file-change="imageFileChangedHandler" />
     <p>Aperçu</p>
     <img :src="image" alt="Base64 Image" />
     <h2>Choix des réponses</h2>
     <div>
-      <input type="text" v-model="possibleAnswersText[0]" />
+      <textarea v-model="possibleAnswersText[0]"></textarea>
       <input type="radio" v-model="rightAnswer" value="0" />
     </div>
     <div>
-      <input type="text" v-model="possibleAnswersText[1]" />
+      <textarea v-model="possibleAnswersText[1]"></textarea>
       <input type="radio" v-model="rightAnswer" value="1" />
     </div>
     <div>
-      <input type="text" v-model="possibleAnswersText[2]" />
+      <textarea v-model="possibleAnswersText[2]"></textarea>
       <input type="radio" v-model="rightAnswer" value="2" />
     </div>
     <div>
-      <input type="text" v-model="possibleAnswersText[3]" />
+      <textarea v-model="possibleAnswersText[3]"></textarea>
       <input type="radio" v-model="rightAnswer" value="3" />
     </div>
     <button type="button" @click="save">Sauvegarder</button>

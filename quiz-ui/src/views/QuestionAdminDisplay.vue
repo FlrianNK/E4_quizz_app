@@ -45,7 +45,7 @@ export default {
   methods: {
     disconnect() {
       participationStorageService.clearAdminMode();
-      location.reload();
+      this.$router.push("/admin");
     },
     back() {
       this.$router.push("/admin");
