@@ -6,8 +6,10 @@ import { RouterLink, RouterView } from "vue-router";
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/admin">Administration</RouterLink>
+        <img class="logo" src="./components/logo.jpg" alt="logo" />
+        <p class="nav">Jelly Quiz</p>
+        <RouterLink class="nav-link" to="/">Home</RouterLink>
+        <RouterLink class="nav-link" to="/admin">Administration</RouterLink>
       </nav>
     </div>
   </header>
@@ -17,55 +19,44 @@ import { RouterLink, RouterView } from "vue-router";
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
+  background-color: #541b5f;
 }
 
 nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  color: #c2a1c9;
+  padding-right: 200px;
+}
+
+nav > p {
+  margin-right: 80px;
+}
+
+.logo {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 20px;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10%;
+  margin-right: 10px;
+}
+nav a.nav-link {
+  color: #b164c1;
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: #e3d2e2;
 }
 
 nav a.router-link-exact-active:hover {
   background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>
