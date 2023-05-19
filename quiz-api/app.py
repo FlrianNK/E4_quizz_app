@@ -4,6 +4,7 @@ from flask_cors import CORS
 from jwt_utils import *
 from question_utils import *
 from participation_utils import *
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -28,6 +29,9 @@ def PostLogin():
 def RebuildDb():
     status = verifyAuthorization(request)[1]
     if status == 200:
+        filename = "DataBase.db"
+        if not os.path.exists(filename):
+            open(filename, 'x')
         return initDataBase()
     return verifyAuthorization(request)
 
