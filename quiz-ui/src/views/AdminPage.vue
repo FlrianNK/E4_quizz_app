@@ -52,3 +52,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.AdminPage {
+  margin-top: 40px;
+  margin-right: 15vw;
+  margin-left: 15vw;
+}
+</style>

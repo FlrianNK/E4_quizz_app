@@ -4,10 +4,16 @@ import { RouterLink, RouterView } from "vue-router";
 
 <template>
   <header>
-    <div class="wrapper">
+    <div class="naviguation-bar">
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/admin">Administration</RouterLink>
+        <div class="logo">
+          <img src="./components/logo.jpg" alt="logo" />
+          <p>Jelly Quiz</p>
+        </div>
+        <div class="links">
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/admin">Administration</RouterLink>
+        </div>
       </nav>
     </div>
   </header>
@@ -17,55 +23,48 @@ import { RouterLink, RouterView } from "vue-router";
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
+  background-color: #541b5f;
+  font-size: 18x;
+  color: #c2a1c9;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.links {
+  float: none;
+  position: absolute;
+  height: 100%;
+  width: 30%;
+  display: flex;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.links a {
+  color: #b164c1;
+  text-decoration: none;
+  height: inherit;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.logo {
+  display: flex;
+  margin-left: 15vw;
+  align-items: center;
+}
+.logo > p {
+  font-style: italic;
+  font-size: 15px;
+  margin-top: 5px;
+}
+.logo > img {
+  width: 35px;
+  height: 35px;
+  border-radius: 10%;
+  margin-right: 10px;
+}
 nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+  color: #e3d2e2;
 }
 </style>

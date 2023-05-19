@@ -45,7 +45,7 @@ export default {
   methods: {
     disconnect() {
       participationStorageService.clearAdminMode();
-      location.reload();
+      this.$router.push("/admin");
     },
     back() {
       this.$router.push("/admin");
@@ -63,6 +63,11 @@ export default {
 </script>
 
 <style>
+.QuestionAdminDisplay {
+  margin-top: 40px;
+  margin-right: 15vw;
+  margin-left: 15vw;
+}
 .marker {
   background-color: rgba(61, 146, 61, 0.538);
 }
