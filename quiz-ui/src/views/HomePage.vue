@@ -2,21 +2,7 @@
   <div class="HomePage">
     <img class="logo" src="../components/logo.jpg" alt="logo" />
     <h1>Jelly Quiz</h1>
-    <div v-if="registeredScores.length > 0" class="score-entry">
-      <div class="score-header">
-        <span class="score-header">Nom</span>
-        <span class="score-header">Score</span>
-      </div>
-      <div
-        v-for="scoreEntry in registeredScores"
-        :key="scoreEntry.date"
-        class="score-item"
-      >
-        <span class="player-name">{{ scoreEntry.playerName }}</span>
-        <span class="score">{{ scoreEntry.score }}</span>
-      </div>
-    </div>
-
+    <ParticipationDisplay :registeredScores="registeredScores" />
     <router-link class="new-quiz" to="/start-new-quiz-page"
       >Démarrer le quiz !</router-link
     >
@@ -26,9 +12,12 @@
 <script>
 import quizApiService from "@/services/QuizApiService";
 import participationStorageService from "@/services/ParticipationStorageService";
+import ParticipationDisplay from "./ParticipationDisplay.vue";
 
 export default {
-  name: "HomePage",
+  components: {
+    ParticipationDisplay,
+  },
   data() {
     return {
       registeredScores: [],
@@ -58,27 +47,6 @@ h1 {
   width: 150px;
   height: 150px;
   border-radius: 10%;
-}
-.score-entry {
-  width: 300px;
-  padding-top: 15px;
-  border-top: 2px solid #8b269f;
-  margin-top: 35px;
-}
-
-.score-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.score-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  margin-bottom: 5px;
 }
 a.new-quiz {
   display: inline-block;
