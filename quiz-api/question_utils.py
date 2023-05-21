@@ -58,7 +58,7 @@ def postQuestionToDB(data):
     result = cur.fetchone()
     totalQuestionsNumber = result[0]
     input_question = Question(**data)
-    if input_question.position == 0:
+    if input_question.position <= 0:
         input_question.position = 1
     if input_question.position < totalQuestionsNumber:
         condition = "position >= " + str(input_question.position)
@@ -134,7 +134,7 @@ def updateQuestionInDB(id, newData):
     totalNumberOfQuestions = result[0]
     if update_question.position > totalNumberOfQuestions:
         update_question.position = totalNumberOfQuestions
-    if update_question.position == 0:
+    if update_question.position <= 0:
         update_question.position = 1
     select_query = f"SELECT * FROM Question WHERE position == {update_question.position}"
     cur.execute(select_query)
