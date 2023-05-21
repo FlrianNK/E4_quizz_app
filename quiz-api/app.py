@@ -29,7 +29,7 @@ def PostLogin():
 def RebuildDb():
     status = verifyAuthorization(request)[1]
     if status == 200:
-        filename = "DataBase.db"
+        filename = "quiz.db"
         if not os.path.exists(filename):
             open(filename, 'x')
         return initDataBase()

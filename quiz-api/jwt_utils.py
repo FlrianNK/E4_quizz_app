@@ -66,7 +66,7 @@ def verifyAuthorization(request):
 
 def initDataBase():
     try:
-        db_connection = sqlite3.connect('./DataBase.db')
+        db_connection = sqlite3.connect('./quiz.db')
         cur = db_connection.cursor()
         cur.execute("begin")
         cur.execute('DROP TABLE IF EXISTS Question')

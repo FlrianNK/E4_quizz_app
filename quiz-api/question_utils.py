@@ -34,7 +34,7 @@ class Answer(object):
 
 def getQuestionsSize():
     row_count = 0
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     cur = db_connection.cursor()
     cur.execute("begin")
     query = f"SELECT COUNT(*) FROM Question"
@@ -49,7 +49,7 @@ def getQuestionsSize():
 
 
 def postQuestionToDB(data):
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
@@ -83,7 +83,7 @@ def postQuestionToDB(data):
 
 
 def getQuestionFromDB(field, value):
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     cur = db_connection.cursor()
     cur.execute("begin")
     select_query = f"SELECT * FROM Question WHERE {field} = ?"
@@ -96,7 +96,7 @@ def getQuestionFromDB(field, value):
 
 def getAllQuestionFromDb():
     questionList = []
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     cur = db_connection.cursor()
     cur.execute("begin")
     query = f"SELECT * FROM Question"
@@ -117,7 +117,7 @@ def getAllQuestionFromDb():
 
 
 def updateQuestionInDB(id, newData):
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
@@ -174,7 +174,7 @@ def updateQuestionInDB(id, newData):
 
 
 def deleteQuestionFromDB(id):
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
@@ -205,7 +205,7 @@ def deleteQuestionFromDB(id):
 
 
 def deleteAllQuestionsFromDB():
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")

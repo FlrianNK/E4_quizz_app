@@ -19,7 +19,7 @@ class Participation(object):
 
 def getParticipationsList():
     participationsList = []
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     cur = db_connection.cursor()
     cur.execute("begin")
     query = f"SELECT * FROM Participation"
@@ -48,7 +48,7 @@ def postParticipationToDB(data):
         if answers[i] == goodAnswers[i+1]:
             score += 1
     input_participation.score = score
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
@@ -69,7 +69,7 @@ def postParticipationToDB(data):
 
 def getGoodAnswersDict():
     goodAnswersDict = {}
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     cur = db_connection.cursor()
     cur.execute("begin")
     query = f"SELECT * FROM Question"
@@ -91,7 +91,7 @@ def getGoodAnswersDict():
 
 
 def deleteAllParticipationsFromDB():
-    db_connection = sqlite3.connect('./DataBase.db')
+    db_connection = sqlite3.connect('./quiz.db')
     db_connection.isolation_level = None
     cur = db_connection.cursor()
     cur.execute("begin")
