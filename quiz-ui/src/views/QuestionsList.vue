@@ -69,7 +69,7 @@ export default {
       this.edit = !this.edit;
     },
     cancel() {
-      location.reload();
+      this.edit = false;
     },
   },
 };
