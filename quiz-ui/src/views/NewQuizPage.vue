@@ -2,6 +2,7 @@
   <div class="NewQuizPage">
     <p>Saisissez votre nom :</p>
     <input type="text" v-model="username" />
+    <p v-if="showErrorMessage">Rentrez un nom valide !</p>
     <button class="start-quiz" type="button" @click="launchNewQuiz">
       GO !
     </button>
@@ -15,12 +16,19 @@ export default {
   data() {
     return {
       username: "",
+      showErrorMessage: false,
     };
   },
   methods: {
     launchNewQuiz() {
-      participationStorageService.savePlayerName(this.username);
-      this.$router.push("/questions");
+      if(this.username){
+        this.showErrorMessage = false;
+        participationStorageService.savePlayerName(this.username);
+        this.$router.push("/questions");
+      }
+      else{
+        this.showErrorMessage = true;
+      }
     },
   },
 };
