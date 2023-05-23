@@ -7,7 +7,12 @@
       </li>
     </ol>
     <button type="button" @click="editQuestion">Créer une question</button>
-    <QuestionEdition v-if="edit" :question="dummyQuestion" :edit="false" />
+    <QuestionEdition
+      v-if="edit"
+      :question="dummyQuestion"
+      :edit="false"
+      :cancel="cancel"
+    />
   </div>
 </template>
 
@@ -62,6 +67,9 @@ export default {
     },
     editQuestion() {
       this.edit = !this.edit;
+    },
+    cancel() {
+      location.reload();
     },
   },
 };

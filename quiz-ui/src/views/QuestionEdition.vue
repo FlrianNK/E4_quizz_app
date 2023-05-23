@@ -47,6 +47,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    cancel: {
+      type: Function,
+      required: true,
+    },
   },
   components: {
     ImageUpload: imageUpload,
@@ -111,9 +115,6 @@ export default {
         await quizApiService.addQuestion(newQuestion, token);
         location.reload();
       }
-    },
-    cancel() {
-      this.$router.push("/admin");
     },
   },
 };

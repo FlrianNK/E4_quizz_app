@@ -18,7 +18,12 @@
     </ul>
     <button type="button" @click="editQuestion">Éditer</button>
     <button type="button" @click="deleteQuestion">Supprimer</button>
-    <QuestionEdition v-if="edit" :question="currentQuestion" :edit="true" />
+    <QuestionEdition
+      v-if="edit"
+      :question="currentQuestion"
+      :edit="true"
+      :cancel="cancel"
+    />
   </div>
 </template>
 
@@ -56,6 +61,9 @@ export default {
     async deleteQuestion() {
       const token = participationStorageService.getToken();
       await quizApiService.deleteQuestion(this.currentQuestion.id, token);
+      this.$router.push("/admin");
+    },
+    cancel() {
       this.$router.push("/admin");
     },
   },
